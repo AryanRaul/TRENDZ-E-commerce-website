@@ -1,0 +1,12 @@
+{
+  "name": "trendz",
+  "version": "1.0.0",
+  "private": true,
+  "description": "TRENDS full-stack fashion e-commerce application",
+  "scripts": {
+    "dev:client": "npm run dev --prefix client",
+    "dev:server": "npm run dev --prefix server",
+    "build:client": "npm run build --prefix client",
+    "seed": "npm run seed --prefix server"
+  }
+}

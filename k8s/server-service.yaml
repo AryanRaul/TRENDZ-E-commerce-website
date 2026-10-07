@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: trendz-server
+  labels:
+    app: trendz-server
+spec:
+  type: ClusterIP
+  selector:
+    app: trendz-server
+  ports:
+    - protocol: TCP
+      port: 5000
+      targetPort: 5000

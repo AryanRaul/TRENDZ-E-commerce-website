@@ -1,0 +1,44 @@
+/* Native table layout: header and body cells use the same column widths. */
+.admin-table-wrap { width: 100%; overflow-x: auto; }
+.admin-products table { width: 100%; min-width: 920px; table-layout: fixed; border-collapse: collapse; }
+.admin-products th, .admin-products td { display: table-cell; min-width: 0; overflow-wrap: anywhere; vertical-align: middle; }
+
+/* Catalogue: Product | Gender | Category | Price | Sizes | Stock | Status | Actions */
+.admin-products:not(.admin-orders) th:nth-child(1), .admin-products:not(.admin-orders) td:nth-child(1) { width: 25%; }
+.admin-products:not(.admin-orders) th:nth-child(2), .admin-products:not(.admin-orders) td:nth-child(2) { width: 9%; }
+.admin-products:not(.admin-orders) th:nth-child(3), .admin-products:not(.admin-orders) td:nth-child(3) { width: 11%; }
+.admin-products:not(.admin-orders) th:nth-child(4), .admin-products:not(.admin-orders) td:nth-child(4) { width: 10%; }
+.admin-products:not(.admin-orders) th:nth-child(5), .admin-products:not(.admin-orders) td:nth-child(5) { width: 13%; }
+.admin-products:not(.admin-orders) th:nth-child(6), .admin-products:not(.admin-orders) td:nth-child(6) { width: 8%; }
+.admin-products:not(.admin-orders) th:nth-child(7), .admin-products:not(.admin-orders) td:nth-child(7) { width: 10%; }
+.admin-products:not(.admin-orders) th:nth-child(8), .admin-products:not(.admin-orders) td:nth-child(8) { width: 14%; }
+
+/* Orders: Order | Customer | Date | Total | Status | Action */
+.admin-orders table { min-width: 850px; }
+.admin-orders th:nth-child(1), .admin-orders td:nth-child(1) { width: 22%; }
+.admin-orders th:nth-child(2), .admin-orders td:nth-child(2) { width: 20%; }
+.admin-orders th:nth-child(3), .admin-orders td:nth-child(3) { width: 13%; }
+.admin-orders th:nth-child(4), .admin-orders td:nth-child(4) { width: 12%; }
+.admin-orders th:nth-child(5), .admin-orders td:nth-child(5) { width: 13%; }
+.admin-orders th:nth-child(6), .admin-orders td:nth-child(6) { width: 20%; }
+.admin-orders td:nth-child(1) strong, .admin-order-email { display: block; overflow-wrap: anywhere; word-break: break-word; }
+.admin-order-email { margin-top: 3px; line-height: 1.25; }
+
+/* Only action content is a flex container; its table cell stays a table cell. */
+.admin-products td.admin-actions { display: table-cell !important; }
+.admin-actions { white-space: normal !important; }
+.admin-actions .text-button { display: block; margin: 0 0 8px; white-space: normal !important; text-decoration: none !important; }
+.admin-actions .text-button:last-child { margin-bottom: 0; }
+.admin-form select option, .admin-filters select option { text-transform: capitalize; }
+
+.admin-product-cards, .admin-order-cards { display: none; }
+
+@media (max-width: 680px) {
+  .admin-products .admin-table-wrap { display: none; }
+  .admin-product-cards, .admin-order-cards { display: grid; gap: 14px; }
+  .admin-product-cards article { display: grid; grid-template-columns: 78px minmax(0, 1fr); gap: 14px; border-top: 1px solid #e5e1da; padding-top: 14px; }
+  .admin-product-cards img { width: 78px; height: 98px; object-fit: cover; background: #ece8e0; }
+  .admin-product-cards h3 { font-family: 'DM Sans', sans-serif; font-size: 1rem; margin: 3px 0 8px; overflow-wrap: anywhere; }
+  .admin-order-cards article { display: grid; gap: 10px; border-top: 1px solid #e5e1da; padding-top: 14px; }
+  .admin-order-cards small { display: block; color: #777168; font-size: .72rem; line-height: 1.5; margin-top: 3px; }
+}

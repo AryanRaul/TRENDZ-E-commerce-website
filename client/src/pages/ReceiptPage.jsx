@@ -1,0 +1,16 @@
+import { useEffect, useState } from 'react';
+import { Link, useParams } from 'react-router-dom';
+import { apiRequest } from '../config/api';
+import { useAuth } from '../context/AuthContext';
+
+const money = (amount) => new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(amount);
+const paymentLabel = (method) => ({ SIMULATED_CARD: 'Simulated Card', UPI: 'Simulated UPI', COD: 'Cash on Delivery' }[method] || method);
+
+export default function ReceiptPage() {
+  const { id } = useParams(); const { token } = useAuth();
+  const [order, setOrder] = useState(null); const [customerEmail, setCustomerEmail] = useState(''); const [error, setError] = useState('');
+  useEffect(() => { apiRequest(`/api/orders/${id}`, { headers: { Authorization: `Bearer ${token}` } }).then((data) => { setOrder(data.order); setCustomerEmail(data.customerEmail); }).catch((requestError) => setError(requestError.message)); }, [id, token]);
+  if (error) return <main className="receipt-page"><p className="form-error">{error}</p><Link to="/orders">Back to orders</Link></main>;
+  if (!order) return <main className="receipt-page"><p>Loading receipt…</p></main>;
+  return <main className="receipt-page"><section className="receipt" id="printable-receipt"><header className="receipt-header"><p className="eyebrow">TRENDZ</p><h1>Order / Payment Receipt</h1><span className={`status-badge payment-${String(order.paymentStatus).toLowerCase()}`}>{order.paymentStatus}</span></header><dl className="receipt-meta"><div><dt>Receipt number</dt><dd>{order.orderNumber}</dd></div><div><dt>Order ID</dt><dd>{order._id}</dd></div><div><dt>Purchase date & time</dt><dd>{new Date(order.createdAt).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' })}</dd></div><div><dt>Customer email</dt><dd>{customerEmail}</dd></div><div><dt>Payment method</dt><dd>{paymentLabel(order.paymentMethod)}</dd></div><div><dt>Transaction ID</dt><dd>{order.paymentReference || (order.paymentMethod === 'COD' ? 'Payable on delivery' : 'Not available')}</dd></div></dl><section className="receipt-items"><h2>Products</h2>{order.items.map((item) => <article key={`${item.productId}-${item.size}`}><div><strong>{item.productName}</strong><small>SKU / Product ID: {item.productSku || String(item.productId)}</small><small>Size: {item.size} · Quantity: {item.quantity}</small></div><div><small>{money(item.price)} each</small><strong>{money(item.price * item.quantity)}</strong></div></article>)}</section><section className="receipt-totals"><p><span>Subtotal</span><strong>{money(order.subtotal)}</strong></p><p><span>Delivery</span><strong>{money(order.deliveryCharge)}</strong></p><p><span>Discount</span><strong>−{money(order.discount)}</strong></p><p className="receipt-total"><span>Total amount</span><strong>{money(order.totalAmount)}</strong></p></section><footer><strong>Thank you for shopping with TRENDZ.</strong><p>Your order has been successfully placed.</p></footer></section><div className="receipt-actions"><button className="form-submit" type="button" onClick={() => window.print()}>Print receipt</button><Link className="form-submit receipt-secondary" to="/">Continue shopping</Link><Link className="text-button" to={`/orders/${order._id}`}>View order</Link></div></main>;
+}
